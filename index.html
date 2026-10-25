@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog del hacker</title>
+    <style>
+        :root {
+            --fondo: #080c08;
+            --panel: #0d150f;
+            --verde: #00ff66;
+            --verde-suave: #a3ffbd;
+            --texto: #d5ffe0;
+            --verde-oscuro: #10351c;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 30px 20px 60px;
+            background-color: var(--fondo);
+            background-image:
+                linear-gradient(rgba(0, 255, 102, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            color: var(--verde);
+            font-family: Consolas, "Courier New", monospace;
+            line-height: 1.6;
+        }
+
+        main {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: clamp(1.6rem, 5vw, 2.6rem);
+            text-shadow: 0 0 12px var(--verde);
+            margin: 10px 0 30px;
+        }
+
+        h1::after {
+            content: "_";
+            animation: parpadeo 1s steps(1) infinite;
+        }
+
+        h2 {
+            color: var(--verde-suave);
+            border-bottom: 1px solid var(--verde);
+            padding-bottom: 10px;
+            margin-top: 50px;
+        }
+
+        p { color: var(--texto); max-width: 70ch; }
+
+        /* Slider en acordeón */
+        .slider {
+            display: flex;
+            gap: 10px;
+            height: 420px;
+            margin: 24px 0;
+        }
+
+        .slider .panel {
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+            margin: 0;
+            border: 2px solid var(--verde);
+            border-radius: 10px;
+            background: var(--panel);
+            cursor: pointer;
+            transition: flex 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+        }
+
+        .slider .panel:hover,
+        .slider .panel:focus-visible {
+            flex: 5;
+            outline: none;
+            box-shadow: 0 0 18px rgba(0, 255, 102, 0.5);
+        }
+
+        .slider .panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 0;
+            border-radius: 0;
+            filter: grayscale(1) brightness(0.6);
+            transition: filter 0.5s ease-in-out;
+        }
+
+        .slider .panel:hover img,
+        .slider .panel:focus-visible img {
+            filter: none;
+        }
+
+        .slider figcaption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 30px 14px 12px;
+            background: linear-gradient(transparent, rgba(8, 12, 8, 0.92));
+            color: var(--verde-suave);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out 0.1s;
+        }
+
+        .slider .panel:hover figcaption,
+        .slider .panel:focus-visible figcaption {
+            opacity: 1;
+        }
+
+        /* Multimedia */
+        img, video {
+            display: block;
+            max-width: 100%;
+            border: 2px solid var(--verde);
+            border-radius: 8px;
+        }
+
+        .multimedia {
+            display: grid;
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        audio {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Tabla */
+        .tabla-scroll { overflow-x: auto; }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid var(--verde);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th { background-color: var(--verde-oscuro); }
+
+        /* Formulario */
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        input, button {
+            padding: 10px 14px;
+            border-radius: 5px;
+            border: 1px solid var(--verde);
+            font: inherit;
+        }
+
+        input {
+            flex: 1 1 240px;
+            background-color: #101810;
+            color: #fff;
+        }
+
+        input:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--verde-suave);
+            outline-offset: 2px;
+        }
+
+        button {
+            background-color: var(--verde);
+            color: #000;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--verde-suave);
+            box-shadow: 0 0 12px var(--verde);
+        }
+
+        #mensaje { width: 100%; min-height: 1.6em; margin: 0; }
+
+        /* Recuadro de contacto */
+        .contacto {
+            border: 2px solid var(--verde);
+            border-radius: 10px;
+            background: var(--panel);
+            padding: 20px;
+            margin: 24px 0;
+            box-shadow: 0 0 14px rgba(0, 255, 102, 0.15);
+        }
+
+        .contacto p { margin: 0 0 16px; }
+        .contacto p a { color: var(--verde-suave); }
+
+        .contacto-enlaces {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .contacto-enlaces a {
+            display: block;
+            padding: 12px 14px;
+            border: 1px solid var(--verde);
+            border-radius: 6px;
+            color: var(--verde);
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+
+        .contacto-enlaces a:hover,
+        .contacto-enlaces a:focus-visible {
+            background-color: var(--verde);
+            color: #000;
+            box-shadow: 0 0 12px var(--verde);
+            outline: none;
+        }
+
+        @keyframes parpadeo { 50% { opacity: 0; } }
+
+        @media (max-width: 640px) {
+            .slider { flex-direction: column; height: 520px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::after { animation: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Bienvenido al blog del hacker</h1>
+
+    <h2>Cada vez más cerca de ser hacker</h2>
+    <p>Este es un blog de prueba.</p>
+    <p>Haré un blog mucho mejor, lo prometo.</p>
+
+    <!-- Para usar una imagen distinta en cada panel, cambia el src por
+         multimedia/slide1.jpg, slide2.jpg, etc. y ajusta el texto. -->
+    <section class="slider" aria-label="Galería del blog">
+        <figure class="panel" tabindex="0">
+            <img src="multimedia/imagen.jpg" alt="Imagen del blog, parte izquierda" style="object-position: 0% 50%;">
+            <figcaption>Inicio</figcaption>
+        </figure>
+        <figure class="panel" tabindex="0">
+            <img src="multimedia/imagen.jpg" alt="Imagen del blog, zona centro-izquierda" style="object-position: 25% 50%;">
+            <figcaption>Redes</figcaption>
+        </figure>
+        <figure class="panel" tabindex="0">
+            <img src="multimedia/imagen.jpg" alt="Imagen del blog, zona central" style="object-position: 50% 50%;">
+            <figcaption>Código</figcaption>
+        </figure>
+        <figure class="panel" tabindex="0">
+            <img src="multimedia/imagen.jpg" alt="Imagen del blog, zona centro-derecha" style="object-position: 75% 50%;">
+            <figcaption>Seguridad</figcaption>
+        </figure>
+        <figure class="panel" tabindex="0">
+            <img src="multimedia/imagen.jpg" alt="Imagen del blog, parte derecha" style="object-position: 100% 50%;">
+            <figcaption>Próximamente</figcaption>
+        </figure>
+    </section>
+
+    <h2>Audio</h2>
+    <div class="multimedia">
+        <audio controls src="multimedia/audio.mp3"></audio>
+    </div>
+
+    <h2>Archivos secretos</h2>
+    <div class="tabla-scroll">
+        <table>
+            <tr>
+                <th>Contraseña</th>
+                <th>Códigos</th>
+            </tr>
+            <tr>
+                <td>********</td>
+                <td>Próximamente...</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>Vídeo y música</h2>
+    <div class="multimedia">
+        <video controls src="multimedia/hacker.mp4"></video>
+        <audio controls src="multimedia/musica.mp3"></audio>
+    </div>
+
+    <h2>Contacto</h2>
+    <section class="contacto" aria-label="Enlaces de contacto">
+        <p>Escríbeme o síguenos por tu red favorita.</p>
+        <p>WhatsApp de Sr Ciber: <a href="https://wa.me/525561965349">+52 55 6196 5349</a></p>
+        <div class="contacto-enlaces">
+            <a href="https://www.facebook.com/share/1Gpfd9tVBJ/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Visita nuestro Facebook</a>
+            <a href="https://wa.me/message/6OQ32OPHCETDD1" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a>
+            <a href="https://www.instagram.com/money_offline16h" target="_blank" rel="noopener noreferrer">Síguenos en Instagram</a>
+            <a href="https://m.me/MoneyEconomy03" target="_blank" rel="noopener noreferrer">Escríbenos por Messenger</a>
+        </div>
+    </section>
+
+    <h2>Suscríbete</h2>
+    <form id="suscripcion">
+        <input type="email" id="correo" placeholder="angeleduard3295@gmail.com" aria-label="Correo electrónico" required>
+        <button type="submit">Suscribir</button>
+        <p id="mensaje" role="status"></p>
+    </form>
+</main>
+
+<script>
+    document.getElementById("suscripcion").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var correo = document.getElementById("correo");
+        document.getElementById("mensaje").textContent = "Suscripción registrada para " + correo.value + ".";
+        correo.value = "";
+    });
+</script>
+</body>
+</html>
